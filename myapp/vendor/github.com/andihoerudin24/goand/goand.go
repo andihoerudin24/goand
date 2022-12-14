@@ -1,5 +1,10 @@
 package goand
 
+import (
+	"fmt"
+	"github.com/joho/godotenv"
+)
+
 const version = "1.0.0"
 
 type Goand struct {
@@ -17,6 +22,17 @@ func (g *Goand) New(rootPath string) error {
 	if err != nil {
 		return err
 	}
+
+	err = g.checkDotEnv(rootPath)
+	if err != nil {
+		return err
+	}
+
+	//read .env
+	err = godotenv.Load(rootPath + "/.env")
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -28,6 +44,14 @@ func (g *Goand) Init(p initPaths) error {
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func (g *Goand) checkDotEnv(path string) error {
+	err := g.CreateFileIfNotExist(fmt.Sprintf("%s/.env", path))
+	if err != nil {
+		return err
 	}
 	return nil
 }
