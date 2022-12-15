@@ -2,10 +2,13 @@ package goand
 
 import (
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 const version = "1.0.0"
@@ -17,6 +20,7 @@ type Goand struct {
 	ErrorLog *log.Logger
 	InfoLog  *log.Logger
 	RootPath string
+	Routes   *chi.Mux
 	config   config
 }
 
@@ -53,12 +57,13 @@ func (g *Goand) New(rootPath string) error {
 	g.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG"))
 	g.Version = version
 	g.RootPath = rootPath
+	g.Routes = g.routes().(*chi.Mux)
 
 	g.config = config{
 		port:     os.Getenv("PORT"),
 		renderer: os.Getenv("RENDERER"),
 	}
-	
+
 	return nil
 }
 
@@ -72,6 +77,21 @@ func (g *Goand) Init(p initPaths) error {
 		}
 	}
 	return nil
+}
+
+// ListenAndServe start the web server
+func (g *Goand) ListenAndServe() {
+	srv := &http.Server{
+		Addr:         fmt.Sprintf(":%s", os.Getenv("PORT")),
+		ErrorLog:     g.ErrorLog,
+		Handler:      g.routes(),
+		IdleTimeout:  30 * time.Second,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 600 * time.Second,
+	}
+	g.InfoLog.Printf("Listening on port %s", os.Getenv("PORT"))
+	err := srv.ListenAndServe()
+	g.ErrorLog.Fatal(err)
 }
 
 func (g *Goand) checkDotEnv(path string) error {
