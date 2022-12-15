@@ -18,7 +18,8 @@ func initApplication() *application {
 		log.Fatal(err)
 	}
 	goands.AppName = "myapp"
-	goands.Debug = true
+
+	goands.InfoLog.Println("Debug is set to", goands.Debug)
 
 	app := &application{
 		App: goands,

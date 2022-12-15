@@ -4,7 +4,7 @@ build:
 	@go mod vendor
 	@echo "Building creating"
 	@go build -o tmp/${BINARY_NAME}
-	@echo "Celeritas built!"
+	@echo "Goand build!"
 
 run: build
 	@echo "Starting..."

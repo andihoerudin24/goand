@@ -3,14 +3,26 @@ package goand
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	"log"
+	"os"
+	"strconv"
 )
 
 const version = "1.0.0"
 
 type Goand struct {
-	AppName string
-	Debug   bool
-	Version string
+	AppName  string
+	Debug    bool
+	Version  string
+	ErrorLog *log.Logger
+	InfoLog  *log.Logger
+	RootPath string
+	config   config
+}
+
+type config struct {
+	port     string
+	renderer string
 }
 
 func (g *Goand) New(rootPath string) error {
@@ -33,6 +45,20 @@ func (g *Goand) New(rootPath string) error {
 	if err != nil {
 		return err
 	}
+
+	//create loggers
+	InfoLog, errorLog := g.startLoggers()
+	g.InfoLog = InfoLog
+	g.ErrorLog = errorLog
+	g.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG"))
+	g.Version = version
+	g.RootPath = rootPath
+
+	g.config = config{
+		port:     os.Getenv("PORT"),
+		renderer: os.Getenv("RENDERER"),
+	}
+	
 	return nil
 }
 
@@ -54,4 +80,14 @@ func (g *Goand) checkDotEnv(path string) error {
 		return err
 	}
 	return nil
+}
+
+func (g *Goand) startLoggers() (*log.Logger, *log.Logger) {
+	var infoLog *log.Logger
+	var errorLog *log.Logger
+
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog = log.New(os.Stdout, "ERORR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	return infoLog, errorLog
 }
