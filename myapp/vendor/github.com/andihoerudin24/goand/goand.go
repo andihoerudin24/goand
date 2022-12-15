@@ -17,6 +17,12 @@ type Goand struct {
 	ErrorLog *log.Logger
 	InfoLog  *log.Logger
 	RootPath string
+	config   config
+}
+
+type config struct {
+	port     string
+	renderer string
 }
 
 func (g *Goand) New(rootPath string) error {
@@ -46,7 +52,13 @@ func (g *Goand) New(rootPath string) error {
 	g.ErrorLog = errorLog
 	g.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG"))
 	g.Version = version
+	g.RootPath = rootPath
 
+	g.config = config{
+		port:     os.Getenv("PORT"),
+		renderer: os.Getenv("RENDERER"),
+	}
+	
 	return nil
 }
 
