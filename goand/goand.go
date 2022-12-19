@@ -2,6 +2,7 @@ package goand
 
 import (
 	"fmt"
+	"github.com/andihoerudin24/goand/render"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"log"
@@ -21,6 +22,7 @@ type Goand struct {
 	InfoLog  *log.Logger
 	RootPath string
 	Routes   *chi.Mux
+	Render   *render.Render
 	config   config
 }
 
@@ -63,6 +65,7 @@ func (g *Goand) New(rootPath string) error {
 		port:     os.Getenv("PORT"),
 		renderer: os.Getenv("RENDERER"),
 	}
+	g.Render = g.createRenderer(g)
 
 	return nil
 }
@@ -84,7 +87,7 @@ func (g *Goand) ListenAndServe() {
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", os.Getenv("PORT")),
 		ErrorLog:     g.ErrorLog,
-		Handler:      g.routes(),
+		Handler:      g.Routes,
 		IdleTimeout:  30 * time.Second,
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 600 * time.Second,
@@ -110,4 +113,13 @@ func (g *Goand) startLoggers() (*log.Logger, *log.Logger) {
 	errorLog = log.New(os.Stdout, "ERORR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	return infoLog, errorLog
+}
+
+func (g *Goand) createRenderer(cel *Goand) *render.Render {
+	myRenderer := render.Render{
+		Renderer: g.config.renderer,
+		RootPath: g.RootPath,
+		Port:     g.config.port,
+	}
+	return &myRenderer
 }

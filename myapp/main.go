@@ -1,9 +1,13 @@
 package main
 
-import "github.com/andihoerudin24/goand"
+import (
+	"github.com/andihoerudin24/goand"
+	"myapp/handlers"
+)
 
 type application struct {
-	App *goand.Goand
+	App      *goand.Goand
+	Handlers *handlers.Handlers
 }
 
 func main() {

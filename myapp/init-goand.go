@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/andihoerudin24/goand"
 	"log"
+	"myapp/handlers"
 	"os"
 )
 
@@ -19,10 +20,15 @@ func initApplication() *application {
 	}
 	goands.AppName = "myapp"
 
-	goands.InfoLog.Println("Debug is set to", goands.Debug)
-
-	app := &application{
+	myHandlers := &handlers.Handlers{
 		App: goands,
 	}
+
+	app := &application{
+		App:      goands,
+		Handlers: myHandlers,
+	}
+
+	app.App.Routes = app.routes()
 	return app
 }

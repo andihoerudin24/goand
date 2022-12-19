@@ -1,7 +1,6 @@
 package goand
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -16,9 +15,5 @@ func (g *Goand) routes() http.Handler {
 		mux.Use(middleware.Logger)
 	}
 	mux.Use(middleware.Recoverer)
-	mux.Get("/", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprint(writer, "welcome to goand")
-	})
-
 	return mux
 }

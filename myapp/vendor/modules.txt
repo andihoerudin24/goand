@@ -1,6 +1,7 @@
 # github.com/andihoerudin24/goand v0.0.0 => ../goand
 ## explicit; go 1.18
 github.com/andihoerudin24/goand
+github.com/andihoerudin24/goand/render
 # github.com/go-chi/chi/v5 v5.0.8
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
