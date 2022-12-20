@@ -2,6 +2,7 @@ package goand
 
 import (
 	"fmt"
+	"github.com/CloudyKit/jet/v6"
 	"github.com/andihoerudin24/goand/render"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
@@ -23,6 +24,7 @@ type Goand struct {
 	RootPath string
 	Routes   *chi.Mux
 	Render   *render.Render
+	JetViews *jet.Set
 	config   config
 }
 
@@ -65,7 +67,14 @@ func (g *Goand) New(rootPath string) error {
 		port:     os.Getenv("PORT"),
 		renderer: os.Getenv("RENDERER"),
 	}
-	g.Render = g.createRenderer(g)
+
+	var views = jet.NewSet(
+		jet.NewOSFileSystemLoader(fmt.Sprintf("%s/views", rootPath)),
+		jet.InDevelopmentMode(),
+	)
+	g.JetViews = views
+
+	g.createRenderer()
 
 	return nil
 }
@@ -115,11 +124,12 @@ func (g *Goand) startLoggers() (*log.Logger, *log.Logger) {
 	return infoLog, errorLog
 }
 
-func (g *Goand) createRenderer(cel *Goand) *render.Render {
+func (g *Goand) createRenderer() {
 	myRenderer := render.Render{
 		Renderer: g.config.renderer,
 		RootPath: g.RootPath,
 		Port:     g.config.port,
+		JetViews: g.JetViews,
 	}
-	return &myRenderer
+	g.Render = &myRenderer
 }
