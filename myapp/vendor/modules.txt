@@ -4,10 +4,15 @@ github.com/CloudyKit/fastprinter
 # github.com/CloudyKit/jet/v6 v6.2.0
 ## explicit; go 1.12
 github.com/CloudyKit/jet/v6
+# github.com/alexedwards/scs/v2 v2.5.0
+## explicit; go 1.12
+github.com/alexedwards/scs/v2
+github.com/alexedwards/scs/v2/memstore
 # github.com/andihoerudin24/goand v0.0.0 => ../goand
 ## explicit; go 1.18
 github.com/andihoerudin24/goand
 github.com/andihoerudin24/goand/render
+github.com/andihoerudin24/goand/session
 # github.com/go-chi/chi/v5 v5.0.8
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
