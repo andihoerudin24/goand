@@ -10,10 +10,8 @@ func (a *application) routes() *chi.Mux {
 
 	//add routes here
 	a.App.Routes.Get("/", a.Handlers.Home)
-
-	a.App.Routes.Get("/jet", func(writer http.ResponseWriter, request *http.Request) {
-		a.App.Render.JetPage(writer, request, "testjet", nil, nil)
-	})
+	a.App.Routes.Get("/go-page", a.Handlers.GoPage)
+	a.App.Routes.Get("/jet-page", a.Handlers.JetPage)
 
 	fileServer := http.FileServer(http.Dir("./public"))
 	a.App.Routes.Handle("/public/*", http.StripPrefix("/public", fileServer))
