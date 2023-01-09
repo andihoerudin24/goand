@@ -147,6 +147,8 @@ func (g *Goand) ListenAndServe() {
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 600 * time.Second,
 	}
+	defer g.DB.Pool.Close()
+
 	g.InfoLog.Printf("Listening on port %s", os.Getenv("PORT"))
 	err := srv.ListenAndServe()
 	g.ErrorLog.Fatal(err)
