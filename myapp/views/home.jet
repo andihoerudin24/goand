@@ -15,7 +15,10 @@
                 <img src="/public/images/idb.png" class="mb-5" style="width: 100px;height:auto;">
                 <h1>GoAnd</h1>
                 <hr>
-                <small class="text-muted"></small>
+                <small class="text-muted">Go Buld Something awesome</small>
+                {{if .IsAuthenticated}}
+                    <small>Authenticated!<a href="/users/logout">Logout</a>.</small>
+                {{end}}
             </div>
         </div>
         <hr>
@@ -26,6 +29,7 @@
             <a href="/go-page" class="list-group-item list-group-item-action">Render a go template</a>
             <a href="/jet-page" class="list-group-item list-group-item-action">Render a jet template</a>
             <a href="/session" class="list-group-item list-group-item-action">Try Session</a>
+            <a href="/users/login" class="list-group-item list-group-item-action">Login a User</a>
         </div>
     </div>
 {{end}}

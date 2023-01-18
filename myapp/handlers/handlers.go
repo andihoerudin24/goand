@@ -3,11 +3,13 @@ package handlers
 import (
 	"github.com/CloudyKit/jet/v6"
 	"github.com/andihoerudin24/goand"
+	"myapp/data"
 	"net/http"
 )
 
 type Handlers struct {
-	App *goand.Goand
+	App    *goand.Goand
+	Models data.Models
 }
 
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
