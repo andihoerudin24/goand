@@ -18,11 +18,22 @@ func main() {
 		exitGraceFuly(err)
 	}
 
+	setUp()
+
 	switch arg1 {
 	case "help":
 		showHelp()
 	case "version":
 		color.Yellow("Application version:" + version)
+	case "make":
+		if arg2 == "" {
+			exitGraceFuly(errors.New("make requires a subcommand: (migration|model|handler)"))
+		}
+		err = doMake(arg2, arg3)
+		if err != nil {
+			exitGraceFuly(err)
+		}
+
 	default:
 		log.Println(arg2, arg3)
 	}
