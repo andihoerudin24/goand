@@ -13,6 +13,7 @@ const version = "1.0.0"
 var cel goand.Goand
 
 func main() {
+	var message string
 	arg1, arg2, arg3, err := validateInput()
 	if err != nil {
 		exitGraceFuly(err)
@@ -25,6 +26,15 @@ func main() {
 		showHelp()
 	case "version":
 		color.Yellow("Application version:" + version)
+	case "migrate":
+		if arg2 == "" {
+			arg2 = "up"
+		}
+		err = doMigrate(arg2, arg3)
+		if err != nil {
+			exitGraceFuly(err)
+		}
+		message = "Migration Complete!"
 	case "make":
 		if arg2 == "" {
 			exitGraceFuly(errors.New("make requires a subcommand: (migration|model|handler)"))
@@ -36,7 +46,9 @@ func main() {
 
 	default:
 		log.Println(arg2, arg3)
+		showHelp()
 	}
+	exitGraceFuly(nil, message)
 }
 
 func validateInput() (string, string, string, error) {
@@ -58,13 +70,6 @@ func validateInput() (string, string, string, error) {
 	}
 
 	return arg1, arg2, arg3, nil
-}
-
-func showHelp() {
-	color.Yellow(`Available commands:
-		help    - show the help commands
-		version - print application version
-	`)
 }
 
 func exitGraceFuly(err error, msg ...string) {
