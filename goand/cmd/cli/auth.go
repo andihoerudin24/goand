@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"log"
 	"time"
 )
@@ -35,8 +36,22 @@ func doAuth() error {
 	}
 
 	err = copyFilefromTemplate("templates/data/token.go.txt", cel.RootPath+"/data/token.go")
+	//copy over middleware
+	err = copyFilefromTemplate("templates/middleware/auth.go.txt", cel.RootPath+"/middleware/auth.go")
 	if err != nil {
 		exitGraceFuly(err)
 	}
+
+	err = copyFilefromTemplate("templates/middleware/auth-token.go.txt", cel.RootPath+"/middleware/auth-token.go")
+	if err != nil {
+		exitGraceFuly(err)
+	}
+
+	color.Yellow("  - users, tokens, and remember_tokens migration created and executed")
+	color.Yellow("  - user and token models created")
+	color.Yellow("  - auth middleware created")
+	color.Yellow("")
+	color.Yellow("dont forger to add user and token models in data/models.go and to add appropriate middleware to your routes!")
+
 	return nil
 }
